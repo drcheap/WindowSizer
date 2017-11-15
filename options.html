@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+ <meta charset="utf-8">
+ <link rel="stylesheet" href="options.css"/>
+</head>
+
+<body>
+ <fieldset>
+  <legend>Mange Presets</legend>
+  <form>
+   <table id="presets">
+    <tr>
+     <th>Width</th>
+     <th>Height</th>
+     <th>Name</th>
+     <th>Aciton</th>
+    </tr>
+    <tr id="addPreset">
+     <td><input type="text" id="newWidth" name="newWidth" size="4" maxlength="4"></td>
+     <td><input type="text" id="newHeight" name="newHeight" size="4" maxlength="4"></td>
+     <td><input type="text" id="newName" name="newName" size="15" maxlength="15"></td>
+     <td><button type="button" id="addNew">Add New</button></td>
+    </tr>
+   </table>
+  </form>
+ </fieldset>
+ <script src="options.js"></script>
+</body>
+</html>

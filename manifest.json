@@ -1,0 +1,37 @@
+{
+   "manifest_version": 2,
+   "name": "WindowSizer",
+   "version": "0.3beta",
+   "author": "Dr. Cheap",
+   "description": "Quickly resize the window to one of your favorite sizes.",
+   "homepage_url": "https://addons.mozilla.org/en-US/firefox/addon/WindowSizer",
+   "permissions": ["storage"],
+
+   "applications": {
+      "gecko": {
+         "id": "windowsizer@drcheap.com",
+         "strict_min_version": "57.0"
+      }
+   },
+
+   "icons": {
+     "48": "icons/ws_icon_48.png",
+     "96": "icons/ws_icon_96.png"
+   },
+
+   "options_ui": {
+     "page": "options.html",
+     "browser_style": true
+   },
+
+   "browser_action": {
+      "browser_style": true,
+      "default_title": "WindowSizer",
+      "default_popup": "toolbar_menu.html",
+      "default_icon": {
+         "16": "icons/ws_icon_16.png",
+         "32": "icons/ws_icon_32.png"
+      }
+   }
+
+}
