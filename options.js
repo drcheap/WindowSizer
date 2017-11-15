@@ -76,15 +76,15 @@ function displayPresets() {
          tr.className = "presetItem";
 
          let tdW = document.createElement("td");
-         tdW.innerHTML = presets[i].width;
+         tdW.appendChild(document.createTextNode(presets[i].width));
          tr.appendChild(tdW);
 
          let tdH = document.createElement("td");
-         tdH.innerHTML = presets[i].height;
+         tdH.appendChild(document.createTextNode(presets[i].height));
          tr.appendChild(tdH);
 
          let tdN = document.createElement("td");
-         tdN.innerHTML = presets[i].name;
+         tdN.appendChild(document.createTextNode(presets[i].name));
          tr.appendChild(tdN);
 
          let tdR = document.createElement("td");
@@ -92,7 +92,7 @@ function displayPresets() {
          let btnR = document.createElement("button");
          btnR.type = "button";
          btnR.id = presets[i].id;
-         btnR.innerHTML = "Remove";
+         btnR.appendChild(document.createTextNode("Remove"));
          btnR.addEventListener('click', removePreset);
          tdR.appendChild(btnR);
 

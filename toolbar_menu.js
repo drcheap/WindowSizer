@@ -14,7 +14,7 @@ function updateMenuWithPresets()
             let a = document.createElement("a");
             a.href = "#";
             a.id = RESIZE_PREFIX + presets[i].width + "x" + presets[i].height;
-            a.innerHTML = presets[i].width + "x" + presets[i].height + " " + presets[i].name;
+            a.appendChild(document.createTextNode(presets[i].width + "x" + presets[i].height + " " + presets[i].name));
             menu.appendChild(a);
 
             let br = document.createElement("br");
