@@ -7,19 +7,12 @@
    "homepage_url": "https://addons.mozilla.org/en-US/firefox/addon/windowsizer",
    "permissions": ["storage"],
 
-   "applications": {
-      "gecko": {
-         "id": "windowsizer@drcheap.com",
-         "strict_min_version": "57.0"
-      }
-   },
-
    "icons": {
      "16": "icons/ws_icon_16.png",
      "32": "icons/ws_icon_32.png",
      "48": "icons/ws_icon_48.png",
      "64": "icons/ws_icon_64.png",
-     "96": "icons/ws_icon_96.png"
+     "96": "icons/ws_icon_96.png",
      "128": "icons/ws_icon_128.png"
    },
 
