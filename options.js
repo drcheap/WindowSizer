@@ -34,9 +34,7 @@ function addPreset(e) {
       return;
    }
 
-   let getPresets = browser.storage.local.get("presets");
-   getPresets.then((obj) => {
-
+   browser.storage.local.get("presets").then((obj) => {
       console.log("(add) Adding preset: " + newWidth + "x" + newHeight + " " + newName);
       let item = {
          "id": new Date().valueOf(),      // This is not *perfect* but works as long as two presets aren't created in the same millisecond (o).(O)
@@ -55,9 +53,7 @@ function addPreset(e) {
 }
 
 function displayPresets() {
-   let getPresets = browser.storage.local.get("presets");
-   getPresets.then((obj) => {
-
+   browser.storage.local.get("presets").then((obj) => {
       let presets = obj.presets;
       console.log("(display) Loaded " + presets.length + " presets: %o", presets);
 
@@ -106,9 +102,7 @@ function displayPresets() {
 
 function removePreset(e)
 {
-   let getPresets = browser.storage.local.get("presets");
-   getPresets.then((obj) => {
-
+   browser.storage.local.get("presets").then((obj) => {
       let myId = parseInt(e.target.id);
       console.log("(remove) Request to remove id=" + myId);
 
@@ -135,8 +129,20 @@ function removePreset(e)
 browser.storage.local.get("presets").then((obj) => {
    if(!Array.isArray(obj.presets))
    {
-      console.log("(init) No presets found, initializing...");
-      browser.storage.local.set({"presets": []});
+      // Possible v0.3beta to v0.4beta settings migration
+      browser.storage.sync.get("presets").then((obj) => {
+         if(Array.isArray(obj.presets))
+         {
+            console.log("(init) Migrating settings to local storage...");
+            browser.storage.local.set({"presets": obj.presets}).then(displayPresets);
+            browser.storage.sync.remove("presets");
+         }
+         else
+         {
+            console.log("(init) No presets found, initializing...");
+            browser.storage.local.set({"presets": []});
+         }
+      });
    }
 });
 
