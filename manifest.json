@@ -1,7 +1,7 @@
 {
    "manifest_version": 2,
    "name": "WindowSizer",
-   "version": "0.3beta",
+   "version": "0.4beta",
    "author": "Dr. Cheap",
    "description": "Quickly resize the window to one of your favorite sizes",
    "homepage_url": "https://addons.mozilla.org/en-US/firefox/addon/windowsizer",
@@ -15,8 +15,12 @@
    },
 
    "icons": {
+     "16": "icons/ws_icon_16.png",
+     "32": "icons/ws_icon_32.png",
      "48": "icons/ws_icon_48.png",
+     "64": "icons/ws_icon_64.png",
      "96": "icons/ws_icon_96.png"
+     "128": "icons/ws_icon_128.png"
    },
 
    "options_ui": {
