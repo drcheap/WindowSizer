@@ -34,7 +34,7 @@ function addPreset(e) {
       return;
    }
 
-   let getPresets = browser.storage.sync.get("presets");
+   let getPresets = browser.storage.local.get("presets");
    getPresets.then((obj) => {
 
       console.log("(add) Adding preset: " + newWidth + "x" + newHeight + " " + newName);
@@ -47,7 +47,7 @@ function addPreset(e) {
 
       let presets = obj.presets;
       presets.push(item);
-      browser.storage.sync.set({"presets": presets});
+      browser.storage.local.set({"presets": presets});
       displayPresets();
    });
 
@@ -55,7 +55,7 @@ function addPreset(e) {
 }
 
 function displayPresets() {
-   let getPresets = browser.storage.sync.get("presets");
+   let getPresets = browser.storage.local.get("presets");
    getPresets.then((obj) => {
 
       let presets = obj.presets;
@@ -106,7 +106,7 @@ function displayPresets() {
 
 function removePreset(e)
 {
-   let getPresets = browser.storage.sync.get("presets");
+   let getPresets = browser.storage.local.get("presets");
    getPresets.then((obj) => {
 
       let myId = parseInt(e.target.id);
@@ -124,7 +124,7 @@ function removePreset(e)
          }
       }
 
-      browser.storage.sync.set({"presets": presets});
+      browser.storage.local.set({"presets": presets});
       displayPresets();
    });
 
@@ -132,11 +132,11 @@ function removePreset(e)
 }
 
 // Preset initialization, if needed
-browser.storage.sync.get("presets").then((obj) => {
+browser.storage.local.get("presets").then((obj) => {
    if(!Array.isArray(obj.presets))
    {
       console.log("(init) No presets found, initializing...");
-      browser.storage.sync.set({"presets": []});
+      browser.storage.local.set({"presets": []});
    }
 });
 

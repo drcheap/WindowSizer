@@ -2,7 +2,7 @@ const RESIZE_PREFIX = "resize-";
 
 function updateMenuWithPresets()
 {
-   let getPresets = browser.storage.sync.get("presets");
+   let getPresets = browser.storage.local.get("presets");
    getPresets.then((obj) => {
       if(obj != undefined)
       {
