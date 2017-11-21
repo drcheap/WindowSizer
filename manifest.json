@@ -1,7 +1,7 @@
 {
    "manifest_version": 2,
    "name": "WindowSizer",
-   "version": "0.4beta2",
+   "version": "0.5.1",
    "author": "Dr. Cheap",
    "description": "Quickly resize the window to one of your favorite sizes",
    "homepage_url": "https://addons.mozilla.org/en-US/firefox/addon/windowsizer",
@@ -34,6 +34,67 @@
       "default_icon": {
          "16": "icons/ws_icon_16.png",
          "32": "icons/ws_icon_32.png"
+      }
+   },
+
+   "background": {
+      "scripts": ["common.js", "background.js"]
+   },
+
+   "commands": {
+      "preset-1": {
+         "suggested_key": {
+            "default": "Alt+1"
+         },
+         "description": "Activate preset #1"
+      },
+      "preset-2": {
+         "suggested_key": {
+            "default": "Alt+2"
+         },
+         "description": "Activate preset #2"
+      },
+      "preset-3": {
+         "suggested_key": {
+            "default": "Alt+3"
+         },
+         "description": "Activate preset #3"
+      },
+      "preset-4": {
+         "suggested_key": {
+            "default": "Alt+4"
+         },
+         "description": "Activate preset #4"
+      },
+      "preset-5": {
+         "suggested_key": {
+            "default": "Alt+5"
+         },
+         "description": "Activate preset #5"
+      },
+      "preset-6": {
+         "suggested_key": {
+            "default": "Alt+6"
+         },
+         "description": "Activate preset #6"
+      },
+      "preset-7": {
+         "suggested_key": {
+            "default": "Alt+7"
+         },
+         "description": "Activate preset #7"
+      },
+      "preset-8": {
+         "suggested_key": {
+            "default": "Alt+8"
+         },
+         "description": "Activate preset #8"
+      },
+      "preset-9": {
+         "suggested_key": {
+            "default": "Alt+9"
+         },
+         "description": "Activate preset #9"
       }
    }
 }

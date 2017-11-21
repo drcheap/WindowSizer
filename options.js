@@ -38,8 +38,8 @@ function addPreset(e) {
       console.log("(add) Adding preset: " + newWidth + "x" + newHeight + " " + newName);
       let item = {
          "id": new Date().valueOf(),      // This is not *perfect* but works as long as two presets aren't created in the same millisecond (o).(O)
-         "width": newWidth,
-         "height": newHeight,
+         "width": parseInt(newWidth),
+         "height": parseInt(newHeight),
          "name": newName
       };
 
@@ -66,10 +66,15 @@ function displayPresets() {
 
       for(let i = 0;i < presets.length;i++)
       {
-         console.log("(display) Add item row " + (i+1) + ": " + presets[i].name);
+         let presetIndex = i + 1;
+         console.log("(display) Add item " + presetIndex + ": " + presets[i].name);
 
          let tr = document.createElement("tr");
          tr.className = "presetItem";
+
+         let tdK = document.createElement("td");
+         tdK.appendChild(document.createTextNode("Alt+" + presetIndex));
+         tr.appendChild(tdK);
 
          let tdW = document.createElement("td");
          tdW.appendChild(document.createTextNode(presets[i].width));
@@ -129,20 +134,8 @@ function removePreset(e)
 browser.storage.local.get("presets").then((obj) => {
    if(!Array.isArray(obj.presets))
    {
-      // Possible v0.3beta to v0.4beta settings migration
-      browser.storage.sync.get("presets").then((obj) => {
-         if(Array.isArray(obj.presets))
-         {
-            console.log("(init) Migrating settings to local storage...");
-            browser.storage.local.set({"presets": obj.presets}).then(displayPresets);
-            browser.storage.sync.remove("presets");
-         }
-         else
-         {
-            console.log("(init) No presets found, initializing...");
-            browser.storage.local.set({"presets": []});
-         }
-      });
+      console.log("(init) No presets found, initializing...");
+      browser.storage.local.set({"presets": []});
    }
 });
 

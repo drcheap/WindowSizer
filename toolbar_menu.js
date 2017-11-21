@@ -1,28 +1,42 @@
-const RESIZE_PREFIX = "resize-";
-
 function updateMenuWithPresets()
 {
    let getPresets = browser.storage.local.get("presets");
    getPresets.then((obj) => {
       if(obj != undefined)
       {
-         let menu = document.querySelector("#presets");
+         let list = document.querySelector("#presetsList");
 
          let presets = obj.presets;
          for(let i = 0;i < presets.length;i++)
          {
+            let linkText = presets[i].width + "x" + presets[i].height + " " + presets[i].name;
+            let numberText = "&nbsp;";
+            if(i < 9)
+            {
+               numberText = (i + 1) + ": ";
+            }
+
+            let tr = document.createElement("tr");
+
+            let tdN = document.createElement("td");
+            tr.className = "presetIndex";
+            tdN.appendChild(document.createTextNode(numberText));
+            tr.appendChild(tdN);
+
+            let tdL = document.createElement("td");
+
             let a = document.createElement("a");
             a.href = "#";
-            a.id = RESIZE_PREFIX + presets[i].width + "x" + presets[i].height;
-            a.appendChild(document.createTextNode(presets[i].width + "x" + presets[i].height + " " + presets[i].name));
-            menu.appendChild(a);
+            a.id = PRESET_PREFIX + presets[i].id;
+            a.appendChild(document.createTextNode(linkText));
+            tdL.appendChild(a);
 
-            let br = document.createElement("br");
-            menu.appendChild(br);
+            tr.appendChild(tdL);
+
+            list.appendChild(tr);
          }
       }
    });
-
 }
 
 function doMenuClick(e)
@@ -33,19 +47,10 @@ function doMenuClick(e)
    {
       browser.runtime.openOptionsPage();
    }
-   else if(myId.startsWith(RESIZE_PREFIX))
+   else if(myId.startsWith(PRESET_PREFIX))
    {
-      let xPos = myId.indexOf("x",RESIZE_PREFIX.length);
-      let newWidth = parseInt(myId.substring(RESIZE_PREFIX.length,xPos));
-      let newHeight = parseInt(myId.substring(xPos + 1));
-      let updateInfo = {
-         "width": newWidth,
-         "height": newHeight
-      };
-
-      browser.windows.getCurrent().then((currentWindow) => {
-         browser.windows.update(currentWindow.id, updateInfo);
-      });
+      let presetId = myId.substring(PRESET_PREFIX.length);
+      applyPreset(presetId);
    }
 
    e.preventDefault();
