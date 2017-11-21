@@ -9,7 +9,7 @@ A simple, customizeable window resizer
 
 Inspired by the old Firefox add-on [Browsizer]
 
-After upgrading to Firefox 57, I could no longer user Browsizer, and no suitable repalcements were available.  So I decided to learn how to write an add-on using the WebExtensions API, and here's what I have come up with so far!
+After upgrading to Firefox 57, I could no longer use Browsizer, and no suitable repalcements were available.  So I decided to learn how to write an add-on using the WebExtensions API, and here's what I have come up with so far!
 
 The latest release version is available on [the AMO site].
 
