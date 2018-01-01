@@ -6,3 +6,19 @@ th, td {
    padding-left: 10px;
    padding-top: 2px;
 }
+
+.invalid {
+   outline: 2px groove red;
+}
+
+.errmsg {
+   color: red;
+}
+
+#currentSizeContainer {
+   margin-top: 0.5em;
+}
+
+#currentSize {
+   color: rgb(0, 0, 238);
+}

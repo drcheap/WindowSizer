@@ -2,13 +2,13 @@ function handleCommand(command)
 {
    console.log("(background) handling command: " + command);
 
-   if(command.startsWith(PRESET_PREFIX))
+   if(command.startsWith(PREFIX_PRESET))
    {
       browser.storage.local.get("presets").then((obj) => {
          if(obj != undefined)
          {
             let presets = obj.presets;
-            let presetNum = parseInt(command.substring(PRESET_PREFIX.length));
+            let presetNum = parseInt(command.substring(PREFIX_PRESET.length));
             if(presetNum <= presets.length)
             {
                let presetId = presets[presetNum - 1].id;

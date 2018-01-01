@@ -27,7 +27,7 @@ function updateMenuWithPresets()
 
             let a = document.createElement("a");
             a.href = "#";
-            a.id = PRESET_PREFIX + presets[i].id;
+            a.id = PREFIX_PRESET + presets[i].id;
             a.appendChild(document.createTextNode(linkText));
             tdL.appendChild(a);
 
@@ -47,9 +47,9 @@ function doMenuClick(e)
    {
       browser.runtime.openOptionsPage();
    }
-   else if(myId.startsWith(PRESET_PREFIX))
+   else if(myId.startsWith(PREFIX_PRESET))
    {
-      let presetId = myId.substring(PRESET_PREFIX.length);
+      let presetId = myId.substring(PREFIX_PRESET.length);
       applyPreset(presetId);
    }
 

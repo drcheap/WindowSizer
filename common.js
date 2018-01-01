@@ -1,4 +1,4 @@
-const PRESET_PREFIX = "preset-";
+const PREFIX_PRESET = "preset-";
 
 function applyPreset(presetId)
 {

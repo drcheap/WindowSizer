@@ -16,17 +16,22 @@
      <th>Width</th>
      <th>Height</th>
      <th>Name</th>
-     <th>Aciton</th>
+     <th>Actions</th>
+     <th></th>
     </tr>
     <tr id="addPreset">
      <td>&nbsp;</td>
-     <td><input type="text" id="newWidth" name="newWidth" size="4" maxlength="4"></td>
-     <td><input type="text" id="newHeight" name="newHeight" size="4" maxlength="4"></td>
-     <td><input type="text" id="newName" name="newName" size="15" maxlength="15"></td>
+     <td><input type="text" id="newWidth" size="4" maxlength="4"></td>
+     <td><input type="text" id="newHeight" size="4" maxlength="4"></td>
+     <td><input type="text" id="newName" size="15" maxlength="15"></td>
      <td><button type="button" id="addNew">Add New</button></td>
+     <td id="newStatus"></td>
     </tr>
    </table>
   </form>
+  <div id="currentSizeContainer">
+   Current Window Size: <span id="currentSize"></span>
+  </div>
  </fieldset>
  <script src="options.js"></script>
 </body>
