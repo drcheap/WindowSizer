@@ -4,7 +4,7 @@
    "version": "0.5.2",
    "author": "Dr. Cheap",
    "description": "Quickly resize the window to one of your favorite sizes",
-   "homepage_url": "https://addons.mozilla.org/en-US/firefox/addon/windowsizer",
+   "homepage_url": "https://addons.mozilla.org/firefox/addon/windowsizer",
    "permissions": ["storage"],
 
    "applications": {

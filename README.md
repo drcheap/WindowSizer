@@ -13,5 +13,5 @@ After upgrading to Firefox 57, I could no longer use Browsizer, and no suitable 
 
 The latest release version is available on [the AMO site].
 
-[Browsizer]: https://addons.mozilla.org/en-US/firefox/addon/browsizer
-[the AMO site]: https://addons.mozilla.org/en-US/firefox/addon/windowsizer
+[Browsizer]: https://addons.mozilla.org/firefox/addon/browsizer
+[the AMO site]: https://addons.mozilla.org/firefox/addon/windowsizer
