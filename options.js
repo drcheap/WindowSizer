@@ -176,8 +176,10 @@ function showCurrentSize()
 
 function useCurrentSize()
 {
-   document.querySelector("#newWidth").value = window.outerWidth;
-   document.querySelector("#newHeight").value = window.outerHeight;
+   let pendingEdit = document.querySelector("#editStatus");
+   let mode = pendingEdit == null ? MODE_NEW : MODE_EDIT;
+   document.querySelector("#" + mode + "Width").value = window.outerWidth;
+   document.querySelector("#" + mode + "Height").value = window.outerHeight;
 }
 
 function addPreset(e)
