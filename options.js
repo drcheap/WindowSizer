@@ -28,11 +28,6 @@ function removeClass(ele,cls)
    }
 }
 
-function isNumeric(n)
-{
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
 function getId(fullString,prefixToRemove)
 {
    return parseInt(fullString.substring(prefixToRemove.length));
@@ -43,42 +38,42 @@ function getValues(mode)
    let hasError = false;
 
    let eW = document.querySelector("#" + mode + "Width");
-   let width = eW.value;
-   if(!isNumeric(width) || parseInt(width) > screen.availWidth)
+   let width = parseInt(eW.value);
+   if(Number.isInteger(width) && width > 0 && width <= screen.availWidth)
+   {
+      removeClass(eW,"invalid");
+   }
+   else
    {
       hasError = true;
       addClass(eW,"invalid");
       eW.value = "";
    }
-   else
-   {
-      removeClass(eW,"invalid");
-   }
 
    let eH = document.querySelector("#" + mode + "Height");
-   let height = eH.value;
-   if(!isNumeric(height) || parseInt(height) > screen.availHeight)
+   let height = parseInt(eH.value);
+   if(Number.isInteger(height) && height > 0 && height <= screen.availHeight)
+   {
+      removeClass(eH,"invalid");
+   }
+   else
    {
       hasError = true;
       addClass(eH,"invalid");
       eH.value = "";
    }
-   else
-   {
-      removeClass(eH,"invalid");
-   }
 
    let eN = document.querySelector("#" + mode + "Name");
    let name = eN.value;
-   if(name.length < 1)
+   if(name.length > 0)
+   {
+      removeClass(eN,"invalid");
+   }
+   else
    {
       hasError = true;
       addClass(eN,"invalid");
       eN.value = "";
-   }
-   else
-   {
-      removeClass(eN,"invalid");
    }
 
    let result = {"valid": !hasError};
@@ -95,78 +90,76 @@ function getValues(mode)
       eN.value = "";
       eS.textContent = "";
       removeClass(eS,"errmsg");
-      result.width = parseInt(width);
-      result.height = parseInt(height);
+      result.width = width;
+      result.height = height;
       result.name = name;
    }
    return result;
 }
 
-function displayPresets()
+async function displayPresets()
 {
-   return browser.storage.local.get("presets").then((obj) => {
-      let presets = obj.presets;
-      console.log("(display) Loaded " + presets.length + " presets: %o", presets);
+   let storage = await browser.storage.local.get("presets");
+   let presets = storage.presets;
 
-      let existingRows = document.querySelectorAll(".presetItem");
-      for(let row of existingRows)
-      {
-         console.log("(display) Remove item row");
-         row.remove();
-      };
+   let existingRows = document.querySelectorAll(".presetItem");
+   for(let row of existingRows)
+   {
+      console.log("(display) Remove item row");
+      row.remove();
+   };
 
-      for(let i = 0;i < presets.length;i++)
-      {
-         let presetIndex = i + 1;
-         console.log("(display) Add item " + presetIndex + ": " + presets[i].name);
+   for(let i = 0;i < presets.length;i++)
+   {
+      let presetIndex = i + 1;
+      console.log("(display) Add item " + presetIndex + ": " + presets[i].name);
 
-         // Make the row, the annoying but safe way
-         let tr = document.createElement("tr");
-         tr.className = "presetItem";
+      // Make the row, the annoying but safe way
+      let tr = document.createElement("tr");
+      tr.className = "presetItem";
 
-         let tdK = document.createElement("td");
-         tdK.textContent = "Alt+" + presetIndex;
-         tr.appendChild(tdK);
+      let tdK = document.createElement("td");
+      tdK.textContent = "Alt+" + presetIndex;
+      tr.appendChild(tdK);
 
-         let tdW = document.createElement("td");
-         tdW.textContent = presets[i].width;
-         tr.appendChild(tdW);
+      let tdW = document.createElement("td");
+      tdW.textContent = presets[i].width;
+      tr.appendChild(tdW);
 
-         let tdH = document.createElement("td");
-         tdH.textContent = presets[i].height;
-         tr.appendChild(tdH);
+      let tdH = document.createElement("td");
+      tdH.textContent = presets[i].height;
+      tr.appendChild(tdH);
 
-         let tdN = document.createElement("td");
-         tdN.textContent = presets[i].name;
-         tr.appendChild(tdN);
+      let tdN = document.createElement("td");
+      tdN.textContent = presets[i].name;
+      tr.appendChild(tdN);
 
-         let tdA = document.createElement("td");
+      let tdA = document.createElement("td");
 
-         let btnE = document.createElement("button");
-         btnE.type = "button";
-         btnE.id = PREFIX_EDIT + presets[i].id;
-         btnE.textContent = "Edit";
-         btnE.addEventListener('click', editPreset);
-         tdA.appendChild(btnE);
+      let btnE = document.createElement("button");
+      btnE.type = "button";
+      btnE.id = PREFIX_EDIT + presets[i].id;
+      btnE.textContent = "Edit";
+      btnE.addEventListener('click', editPreset);
+      tdA.appendChild(btnE);
 
-         let btnR = document.createElement("button");
-         btnR.type = "button";
-         btnR.id = PREFIX_REMOVE + presets[i].id;
-         btnR.textContent = "Remove";
-         btnR.addEventListener('click', removePreset);
-         tdA.appendChild(btnR);
+      let btnR = document.createElement("button");
+      btnR.type = "button";
+      btnR.id = PREFIX_REMOVE + presets[i].id;
+      btnR.textContent = "Remove";
+      btnR.addEventListener('click', removePreset);
+      tdA.appendChild(btnR);
 
-         tr.appendChild(tdA);
+      tr.appendChild(tdA);
 
-         tr.appendChild(document.createElement("td"));
+      tr.appendChild(document.createElement("td"));
 
-         // Add it to the table
-         let lastRow = document.querySelector("#addPreset");
-         lastRow.parentNode.insertBefore(tr,lastRow);
-      }
+      // Add it to the table
+      let lastRow = document.querySelector("#addPreset");
+      lastRow.parentNode.insertBefore(tr,lastRow);
+   }
 
-      showCurrentSize();
-   });
+   showCurrentSize();
 }
 
 function showCurrentSize()
@@ -182,40 +175,40 @@ function useCurrentSize()
    document.querySelector("#" + mode + "Height").value = window.outerHeight;
 }
 
-function addPreset(e)
+async function addPreset()
 {
    let values = getValues(MODE_NEW);
    if(values.valid)
    {
-      browser.storage.local.get("presets").then((obj) => {
-         console.log("(add) Adding preset: " + values.width + "x" + values.height + " " + values.name);
-         let item = {
-            "id": new Date().valueOf(),      // This is not *perfect* but works as long as two presets aren't created in the same millisecond (o).(O)
-            "width": values.width,
-            "height": values.height,
-            "name": values.name
-         };
+      console.log("(add) Adding preset: " + values.width + "x" + values.height + " " + values.name);
 
-         let presets = obj.presets;
-         presets.push(item);
-         browser.storage.local.set({"presets": presets});
-         displayPresets();
-      });
+      let item = {
+         "id": new Date().valueOf(),      // This is not *perfect* but works as long as two presets aren't created in the same millisecond (o).(O)
+         "width": values.width,
+         "height": values.height,
+         "name": values.name
+      };
+
+      let storage = await browser.storage.local.get("presets");
+      let presets = storage.presets;
+      presets.push(item);
+      await browser.storage.local.set({"presets": presets});
+      displayPresets();
    }
 
    e.preventDefault();
 }
 
-function editPreset(e)
+async function editPreset(e)
 {
    let myId = getId(e.target.id,PREFIX_EDIT);
 
    let pendingEdit = document.querySelector("#editStatus");
    if(pendingEdit != null)
    {
-      cancelEdits().then(function(){
-         document.querySelector("#" + PREFIX_EDIT + myId).click();
-      });
+      // Abort the other & try this one again
+      await cancelEdits();
+      document.querySelector("#" + PREFIX_EDIT + myId).click();
       return;
    }
 
@@ -247,8 +240,8 @@ function editPreset(e)
    inN.type = "text";
    inN.id = "editName";
    inN.value = tdN.textContent;
-   inN.size = 4;
-   inN.maxLength = 4;
+   inN.size = 15;
+   inN.maxLength = 15;
    tdN.textContent = "";
    tdN.appendChild(inN);
 
@@ -276,76 +269,65 @@ function editPreset(e)
    e.preventDefault();
 }
 
-function saveEdits(e)
+async function saveEdits(e)
 {
    let values = getValues(MODE_EDIT);
    if(values.valid)
    {
+      let myId = getId(e.target.id,PREFIX_EDIT);
+      console.log("(edit) Request to edit id=" + myId);
 
-      browser.storage.local.get("presets").then((obj) => {
-         let myId = getId(e.target.id,PREFIX_EDIT);
-         console.log("(remove) Request to edit id=" + myId);
-
-         let presets = obj.presets;
-         for(let i = 0;i < presets.length;i++)
-         {
-            if(presets[i].id === myId)
-            {
-               console.log("(edit) Found it at i=" + i);
-
-               presets[i].width = values.width;
-               presets[i].height = values.height;
-               presets[i].name = values.name;
-               break;
-            }
-         }
-
-         browser.storage.local.set({"presets": presets});
-         displayPresets();
-      });
-   }
-
-   e.preventDefault();
-}
-
-function cancelEdits()
-{
-   return displayPresets();
-}
-
-function removePreset(e)
-{
-   browser.storage.local.get("presets").then((obj) => {
-      let myId = getId(e.target.id,PREFIX_REMOVE);
-      console.log("(remove) Request to remove id=" + myId);
-
-      let presets = obj.presets;
+      let storage = await browser.storage.local.get("presets");
+      let presets = storage.presets;
       for(let i = 0;i < presets.length;i++)
       {
          if(presets[i].id === myId)
          {
-            console.log("(remove) Found it at i=" + i);
+            console.log("(edit) Found it at i=" + i);
 
-            presets.splice(i,1); // Removes this item
+            presets[i].width = values.width;
+            presets[i].height = values.height;
+            presets[i].name = values.name;
             break;
          }
       }
 
-      browser.storage.local.set({"presets": presets});
+      await browser.storage.local.set({"presets": presets});
       displayPresets();
-   });
+   }
 
    e.preventDefault();
 }
 
-// Preset initialization, if needed
-browser.storage.local.get("presets").then((obj) => {
-   if(!Array.isArray(obj.presets))
+async function cancelEdits()
+{
+   // displayPresets() will take care of this by reloading everything
+   await displayPresets();
+}
+
+async function removePreset(e)
+{
+   let myId = getId(e.target.id,PREFIX_REMOVE);
+   console.log("(remove) Request to remove id=" + myId);
+
+   let storage = await browser.storage.local.get("presets");
+   let presets = storage.presets;
+   for(let i = 0;i < presets.length;i++)
    {
-      console.log("(init) No presets found, initializing...");
-      browser.storage.local.set({"presets": []});
+      if(presets[i].id === myId)
+      {
+         console.log("(remove) Found it at i=" + i);
+
+         presets.splice(i,1); // Removes this item
+         break;
+      }
    }
-});
+
+   await browser.storage.local.set({"presets": presets});
+   displayPresets();
+
+   e.preventDefault();
+}
 
 window.addEventListener("resize", showCurrentSize);
 document.addEventListener("DOMContentLoaded", displayPresets);
