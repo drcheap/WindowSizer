@@ -104,7 +104,7 @@ function getValues(mode)
 
 function displayPresets()
 {
-   browser.storage.local.get("presets").then((obj) => {
+   return browser.storage.local.get("presets").then((obj) => {
       let presets = obj.presets;
       console.log("(display) Loaded " + presets.length + " presets: %o", presets);
 
@@ -120,24 +120,49 @@ function displayPresets()
          let presetIndex = i + 1;
          console.log("(display) Add item " + presetIndex + ": " + presets[i].name);
 
-         // Make the row
+         // Make the row, the annoying but safe way
          let tr = document.createElement("tr");
          tr.className = "presetItem";
-         tr.innerHTML = '';
-         tr.innerHTML += '<td>Alt+' + presetIndex + '</td>';
-         tr.innerHTML += '<td>' + presets[i].width + '</td>';
-         tr.innerHTML += '<td>' + presets[i].height + '</td>';
-         tr.innerHTML += '<td>' + presets[i].name + '</td>';
-         tr.innerHTML += '<td><button type="button" id="' + PREFIX_EDIT + presets[i].id + '">Edit</button><button type="button" id="' + PREFIX_REMOVE + presets[i].id + '">Remove</button></td>';
-         tr.innerHTML += '<td></td>';
 
-         // Add it
+         let tdK = document.createElement("td");
+         tdK.textContent = "Alt+" + presetIndex;
+         tr.appendChild(tdK);
+
+         let tdW = document.createElement("td");
+         tdW.textContent = presets[i].width;
+         tr.appendChild(tdW);
+
+         let tdH = document.createElement("td");
+         tdH.textContent = presets[i].height;
+         tr.appendChild(tdH);
+
+         let tdN = document.createElement("td");
+         tdN.textContent = presets[i].name;
+         tr.appendChild(tdN);
+
+         let tdA = document.createElement("td");
+
+         let btnE = document.createElement("button");
+         btnE.type = "button";
+         btnE.id = PREFIX_EDIT + presets[i].id;
+         btnE.textContent = "Edit";
+         btnE.addEventListener('click', editPreset);
+         tdA.appendChild(btnE);
+
+         let btnR = document.createElement("button");
+         btnR.type = "button";
+         btnR.id = PREFIX_REMOVE + presets[i].id;
+         btnR.textContent = "Remove";
+         btnR.addEventListener('click', removePreset);
+         tdA.appendChild(btnR);
+
+         tr.appendChild(tdA);
+
+         tr.appendChild(document.createElement("td"));
+
+         // Add it to the table
          let lastRow = document.querySelector("#addPreset");
          lastRow.parentNode.insertBefore(tr,lastRow);
-
-         // Add event handlers
-         document.querySelector("#" + PREFIX_EDIT + presets[i].id).addEventListener('click', editPreset);
-         document.querySelector("#" + PREFIX_REMOVE + presets[i].id).addEventListener('click', removePreset);
       }
 
       showCurrentSize();
@@ -146,8 +171,7 @@ function displayPresets()
 
 function showCurrentSize()
 {
-   let eCS = document.querySelector("#currentSize");
-   eCS.innerHTML = window.outerWidth + "x" + window.outerHeight + " (click to use)";
+   let eCS = document.querySelector("#currentSize").textContent = window.outerWidth + "x" + window.outerHeight + " (click to use)";
 }
 
 function useCurrentSize()
@@ -183,24 +207,70 @@ function addPreset(e)
 function editPreset(e)
 {
    let myId = getId(e.target.id,PREFIX_EDIT);
+
+   let pendingEdit = document.querySelector("#editStatus");
+   if(pendingEdit != null)
+   {
+      cancelEdits().then(function(){
+         document.querySelector("#" + PREFIX_EDIT + myId).click();
+      });
+      return;
+   }
+
    let tr = e.target.parentElement.parentElement;
-   let origHotkey = tr.children[0].textContent;
-   let origWidth = tr.children[1].textContent;
-   let origHeight = tr.children[2].textContent;
-   let origName = tr.children[3].textContent;
 
-   // Replace row with editable version
-   tr.innerHTML = '';
-   tr.innerHTML += '<td>' + origHotkey + '</td>';
-   tr.innerHTML += '<td><input type="text" id="editWidth" value="' + origWidth + '" size="4" maxlength="4"></td>';
-   tr.innerHTML += '<td><input type="text" id="editHeight" value="' + origHeight + '" size="4" maxlength="4"></td>';
-   tr.innerHTML += '<td><input type="text" id="editName" value="' + origName + '" size="15" maxlength="15"></td>';
-   tr.innerHTML += '<td><button type="button" id="' + PREFIX_SAVE + myId + '">Save</button><button type="button" id="' + PREFIX_CANCEL + myId + '">Cancel</button></td>';
-   tr.innerHTML += '<td id="editStatus"></td>';
+   // Replace values with editable versions
+   let tdW = tr.children[1]
+   let inW = document.createElement("input");
+   inW.type = "text";
+   inW.id = "editWidth";
+   inW.value = tdW.textContent;
+   inW.size = 4;
+   inW.maxLength = 4;
+   tdW.textContent = "";
+   tdW.appendChild(inW);
 
-   // Add event handlers
-   document.querySelector("#" + PREFIX_SAVE + myId).addEventListener('click', saveEdits);
-   document.querySelector("#" + PREFIX_CANCEL + myId).addEventListener('click', cancelEdits);
+   let tdH = tr.children[2]
+   let inH = document.createElement("input");
+   inH.type = "text";
+   inH.id = "editHeight";
+   inH.value = tdH.textContent;
+   inH.size = 4;
+   inH.maxLength = 4;
+   tdH.textContent = "";
+   tdH.appendChild(inH);
+
+   let tdN = tr.children[3]
+   let inN = document.createElement("input");
+   inN.type = "text";
+   inN.id = "editName";
+   inN.value = tdN.textContent;
+   inN.size = 4;
+   inN.maxLength = 4;
+   tdN.textContent = "";
+   tdN.appendChild(inN);
+
+   // Offer a different set of actions
+   let tdA = tr.children[4];
+   tdA.textContent = "";
+
+   let btnS = document.createElement("button");
+   btnS.type = "button";
+   btnS.id = PREFIX_SAVE + myId;
+   btnS.textContent = "Save";
+   btnS.addEventListener('click', saveEdits);
+   tdA.appendChild(btnS);
+
+   let btnC = document.createElement("button");
+   btnC.type = "button";
+   btnC.id = PREFIX_CANCEL + myId;
+   btnC.textContent = "Cancel";
+   btnC.addEventListener('click', cancelEdits);
+   tdA.appendChild(btnC);
+
+   let tdS = tr.children[5];
+   tdS.id = "editStatus";
+
    e.preventDefault();
 }
 
@@ -238,7 +308,7 @@ function saveEdits(e)
 
 function cancelEdits()
 {
-   displayPresets();
+   return displayPresets();
 }
 
 function removePreset(e)
