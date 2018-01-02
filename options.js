@@ -2,6 +2,8 @@ const PREFIX_EDIT = "edit-";
 const PREFIX_REMOVE = "remove-";
 const PREFIX_SAVE = "save-";
 const PREFIX_CANCEL = "cancel-";
+const PREFIX_DOWN = "down-"
+const PREFIX_UP = "up-"
 const MODE_NEW = "new";
 const MODE_EDIT = "edit";
 
@@ -27,6 +29,13 @@ function removeClass(ele,cls)
       ele.className = ele.className.replace(reg,' ');
    }
 }
+
+Array.prototype.move = function(from, to) {
+   if(from >=0 && from < this.length && to >= 0 && to < this.length)
+   {
+      this.splice(to, 0, this.splice(from, 1)[0]);
+   }
+};
 
 function getId(fullString,prefixToRemove)
 {
@@ -109,17 +118,60 @@ async function displayPresets()
       row.remove();
    };
 
-   for(let i = 0;i < presets.length;i++)
+   let presetCount = presets.length;
+   for(let i = 0;i < presetCount;i++)
    {
-      let presetIndex = i + 1;
-      console.log("(display) Add item " + presetIndex + ": " + presets[i].name);
+      let presetNum = i + 1;
+      let isFirst = (i == 0);
+      let isLast = (i == presetCount - 1);
+      console.log("(display) Add item " + presetNum + ": " + presets[i].name);
+
+      let myId = presets[i].id;
 
       // Make the row, the annoying but safe way
       let tr = document.createElement("tr");
       tr.className = "presetItem";
 
+      let tdP = document.createElement("td");
+
+      let imgDown = document.createElement("img");
+      imgDown.width = 12;
+      imgDown.height = 12;
+      if(isLast)
+      {
+         imgDown.src = "images/arrow_none.png";
+      }
+      else
+      {
+         imgDown.src = "images/arrow_down.png";
+         imgDown.title = "Move Down";
+         imgDown.id = PREFIX_DOWN + i;
+         imgDown.addEventListener('click', moveDown);
+      }
+      tdP.appendChild(imgDown);
+
+      tdP.appendChild(document.createTextNode(" "));
+
+      let imgUp = document.createElement("img");
+      imgUp.width = 12;
+      imgUp.height = 12;
+      if(isFirst)
+      {
+         imgUp.src = "images/arrow_none.png";
+      }
+      else
+      {
+         imgUp.src = "images/arrow_up.png";
+         imgUp.title = "Move Up";
+         imgUp.id = PREFIX_UP + i;
+         imgUp.addEventListener('click', moveUp);
+      }
+      tdP.appendChild(imgUp);
+
+      tr.appendChild(tdP);
+
       let tdK = document.createElement("td");
-      tdK.textContent = "Alt+" + presetIndex;
+      tdK.textContent = "Alt+" + presetNum;
       tr.appendChild(tdK);
 
       let tdW = document.createElement("td");
@@ -138,14 +190,14 @@ async function displayPresets()
 
       let btnE = document.createElement("button");
       btnE.type = "button";
-      btnE.id = PREFIX_EDIT + presets[i].id;
+      btnE.id = PREFIX_EDIT + myId;
       btnE.textContent = "Edit";
       btnE.addEventListener('click', editPreset);
       tdA.appendChild(btnE);
 
       let btnR = document.createElement("button");
       btnR.type = "button";
-      btnR.id = PREFIX_REMOVE + presets[i].id;
+      btnR.id = PREFIX_REMOVE + myId;
       btnR.textContent = "Remove";
       btnR.addEventListener('click', removePreset);
       tdA.appendChild(btnR);
@@ -215,7 +267,7 @@ async function editPreset(e)
    let tr = e.target.parentElement.parentElement;
 
    // Replace values with editable versions
-   let tdW = tr.children[1]
+   let tdW = tr.children[2]
    let inW = document.createElement("input");
    inW.type = "text";
    inW.id = "editWidth";
@@ -225,7 +277,7 @@ async function editPreset(e)
    tdW.textContent = "";
    tdW.appendChild(inW);
 
-   let tdH = tr.children[2]
+   let tdH = tr.children[3]
    let inH = document.createElement("input");
    inH.type = "text";
    inH.id = "editHeight";
@@ -235,7 +287,7 @@ async function editPreset(e)
    tdH.textContent = "";
    tdH.appendChild(inH);
 
-   let tdN = tr.children[3]
+   let tdN = tr.children[4]
    let inN = document.createElement("input");
    inN.type = "text";
    inN.id = "editName";
@@ -246,7 +298,7 @@ async function editPreset(e)
    tdN.appendChild(inN);
 
    // Offer a different set of actions
-   let tdA = tr.children[4];
+   let tdA = tr.children[5];
    tdA.textContent = "";
 
    let btnS = document.createElement("button");
@@ -263,7 +315,7 @@ async function editPreset(e)
    btnC.addEventListener('click', cancelEdits);
    tdA.appendChild(btnC);
 
-   let tdS = tr.children[5];
+   let tdS = tr.children[6];
    tdS.id = "editStatus";
 
    e.preventDefault();
@@ -323,6 +375,34 @@ async function removePreset(e)
       }
    }
 
+   await browser.storage.local.set({"presets": presets});
+   displayPresets();
+
+   e.preventDefault();
+}
+
+async function moveDown(e)
+{
+   let myPos = getId(e.target.id,PREFIX_DOWN);
+   console.log("(move) Moving down from " + myPos);
+
+   let storage = await browser.storage.local.get("presets");
+   let presets = storage.presets;
+   presets.move(myPos,myPos + 1);
+   await browser.storage.local.set({"presets": presets});
+   displayPresets();
+
+   e.preventDefault();
+}
+
+async function moveUp(e)
+{
+   let myPos = getId(e.target.id,PREFIX_UP);
+   console.log("(move) Moving up from " + myPos);
+
+   let storage = await browser.storage.local.get("presets");
+   let presets = storage.presets;
+   presets.move(myPos,myPos - 1);
    await browser.storage.local.set({"presets": presets});
    displayPresets();
 
