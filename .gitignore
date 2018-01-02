@@ -26,7 +26,8 @@ $RECYCLE.BIN/
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -41,6 +42,4 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-screenshots/ss_options1.png
-screenshots/ss_toolbar_menu1.png
 WindowSizer.zip
