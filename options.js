@@ -219,6 +219,7 @@ async function displayPresets()
 
 function showCurrentSize()
 {
+   document.querySelector("#currentSize").textContent = window.outerWidth + "x" + window.outerHeight + " (click to use)";
 }
 
 function useCurrentSize()
