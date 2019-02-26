@@ -36,7 +36,7 @@ async function updateMenuWithPresets()
    }
 }
 
-function doMenuClick(e)
+function doMenuItemClick(e)
 {
    let myId = e.target.id;
 
@@ -53,5 +53,11 @@ function doMenuClick(e)
    e.preventDefault();
 }
 
-document.addEventListener('DOMContentLoaded', updateMenuWithPresets);
-document.addEventListener("click", doMenuClick);
+function showCurrentSize()
+{
+   document.querySelector("#currentSize").textContent = window.outerWidth + "x" + window.outerHeight;
+}
+
+document.addEventListener("DOMContentLoaded", updateMenuWithPresets);
+document.addEventListener("click", doMenuItemClick);
+window.onload = () => setTimeout(showCurrentSize,1000);  // This is such a kludge, but there seems to be no other event to latch on to that gives correct results

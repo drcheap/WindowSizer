@@ -20,6 +20,11 @@ th, td {
    margin-top: 0.5em;
 }
 
-#currentSize {
+#currentSize, #getCurrentSize {
    color: rgb(0, 0, 238);
+   cursor: pointer;
+}
+
+.imgDown, .imgUp {
+   cursor: pointer;
 }

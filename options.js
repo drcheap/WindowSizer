@@ -6,6 +6,7 @@ const PREFIX_DOWN = "down-"
 const PREFIX_UP = "up-"
 const MODE_NEW = "new";
 const MODE_EDIT = "edit";
+const OVERSIZE_ALLOWANCE = 1.1;
 
 // hasClass, addClass, removeClass functions borrowed (and reformatted) from: https://stackoverflow.com/questions/6787383
 function hasClass(ele,cls)
@@ -48,7 +49,7 @@ function getValues(mode)
 
    let eW = document.querySelector("#" + mode + "Width");
    let width = parseInt(eW.value);
-   if(Number.isInteger(width) && width > 0 && width <= screen.availWidth)
+   if(Number.isInteger(width) && width > 0 && width <= screen.availWidth * OVERSIZE_ALLOWANCE)
    {
       removeClass(eW,"invalid");
    }
@@ -61,7 +62,7 @@ function getValues(mode)
 
    let eH = document.querySelector("#" + mode + "Height");
    let height = parseInt(eH.value);
-   if(Number.isInteger(height) && height > 0 && height <= screen.availHeight)
+   if(Number.isInteger(height) && height > 0 && height <= screen.availHeight * OVERSIZE_ALLOWANCE)
    {
       removeClass(eH,"invalid");
    }
@@ -146,6 +147,7 @@ async function displayPresets()
          imgDown.src = "images/arrow_down.png";
          imgDown.title = "Move Down";
          imgDown.id = PREFIX_DOWN + i;
+         addClass(imgDown,"imgDown");
          imgDown.addEventListener('click', moveDown);
       }
       tdP.appendChild(imgDown);
@@ -164,6 +166,7 @@ async function displayPresets()
          imgUp.src = "images/arrow_up.png";
          imgUp.title = "Move Up";
          imgUp.id = PREFIX_UP + i;
+         addClass(imgUp,"imgUp");
          imgUp.addEventListener('click', moveUp);
       }
       tdP.appendChild(imgUp);
@@ -216,7 +219,6 @@ async function displayPresets()
 
 function showCurrentSize()
 {
-   let eCS = document.querySelector("#currentSize").textContent = window.outerWidth + "x" + window.outerHeight + " (click to use)";
 }
 
 function useCurrentSize()
@@ -227,7 +229,7 @@ function useCurrentSize()
    document.querySelector("#" + mode + "Height").value = window.outerHeight;
 }
 
-async function addPreset()
+async function addPreset(e)
 {
    let values = getValues(MODE_NEW);
    if(values.valid)

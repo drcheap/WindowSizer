@@ -19,6 +19,10 @@ a:hover {
    text-align: right
 }
 
+#sizeIndicator {
+   padding: 3px;
+}
+
 #customize {
    border: 1px solid #ffffff
 }
