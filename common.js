@@ -1,4 +1,4 @@
-const PREFIX_PRESET = "preset-";
+const PREFIX_PRESET = "preset-"; // Must match the one in options.js
 
 async function applyPreset(presetId)
 {
@@ -27,4 +27,23 @@ async function resizeWindow(newWidth, newHeight)
 
    let currentWindow = await browser.windows.getCurrent();
    browser.windows.update(currentWindow.id, updateInfo);
+}
+
+async function getShortcutKey(commandName)
+{
+   console.log("(common) retrieving shortcut for " + commandName);
+
+   let shortcutKey = "(none)";
+
+   let commands = await browser.commands.getAll();
+   for(let command of commands)
+   {
+      if(command.name == commandName)
+      {
+         shortcutKey = command.shortcut;
+         break;
+      }
+   }
+
+   return shortcutKey;
 }

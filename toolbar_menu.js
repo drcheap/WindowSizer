@@ -15,6 +15,8 @@ async function updateMenuWithPresets()
          numberText = (i + 1) + ": ";
       }
 
+      let shortcutKey = await getShortcutKey(PREFIX_PRESET + (i + 1));
+
       let tr = document.createElement("tr");
 
       let tdN = document.createElement("td");
@@ -27,6 +29,7 @@ async function updateMenuWithPresets()
       let a = document.createElement("a");
       a.href = "#";
       a.id = PREFIX_PRESET + presets[i].id;
+      a.title = shortcutKey;
       a.appendChild(document.createTextNode(linkText));
       tdL.appendChild(a);
 

@@ -1,3 +1,4 @@
+const PREFIX_PRESET = "preset-"; // Must match the one in common.js
 const PREFIX_EDIT = "edit-";
 const PREFIX_REMOVE = "remove-";
 const PREFIX_SAVE = "save-";
@@ -174,7 +175,7 @@ async function displayPresets()
       tr.appendChild(tdP);
 
       let tdK = document.createElement("td");
-      tdK.textContent = "Alt+" + presetNum;
+      tdK.textContent = await browser.extension.getBackgroundPage().getShortcutKey(PREFIX_PRESET + presetNum);
       tr.appendChild(tdK);
 
       let tdW = document.createElement("td");
