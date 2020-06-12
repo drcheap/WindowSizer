@@ -9,35 +9,71 @@
 <body>
  <fieldset>
   <legend>Manage Presets</legend>
-  <form>
-   <table id="presetsList">
-    <tr>
-     <th></th>
-     <th>Shortcut</td>
-     <th>Width</th>
-     <th>Height</th>
-     <th>Name</th>
-     <th>Actions</th>
-     <th></th>
-    </tr>
-    <tr id="addPreset">
-     <td>&nbsp;</td>
-     <td>&nbsp;</td>
-     <td><input type="text" id="newWidth" size="4" maxlength="4"></td>
-     <td><input type="text" id="newHeight" size="4" maxlength="4"></td>
-     <td><input type="text" id="newName" size="15" maxlength="15"></td>
-     <td><button type="button" id="addNew">Add New</button></td>
-     <td id="newStatus"></td>
-    </tr>
-   </table>
-  </form>
+  <div>
+   <form>
+    <table id="presetsList">
+     <tr>
+      <th></th>
+      <th>Shortcut</td>
+      <th>Width</th>
+      <th>Height</th>
+      <th>Name</th>
+      <th>Actions</th>
+      <th></th>
+     </tr>
+     <tr id="addPreset">
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td><input type="text" id="newWidth" size="3" maxlength="5"></td>
+      <td><input type="text" id="newHeight" size="3" maxlength="5"></td>
+      <td><input type="text" id="newName" size="12" maxlength="15"></td>
+      <td><button type="button" id="addNew">Add New</button></td>
+      <td id="newStatus"></td>
+     </tr>
+    </table>
+   </form>
+  </div>
   <div id="currentSizeContainer">
-   Current Window Size: <span id="currentSize"></span> (if size isn't auto updating, please refresh the page)
+   Detected Screen Size: <span id="screenSize"></span><br>
+   Current Window Size: <span id="currentSize"></span> (if not updating as you resize, please reload the page)
   </div>
   <div>
    Shortcut keys can be changed in the add-ons manager (<a href="https://support.mozilla.org/en-US/kb/manage-extension-shortcuts-firefox">more info</a>)
   </div>
  </fieldset>
+ <fieldset class="comingSoon">
+  <legend>Backup/Restore</legend>
+  <div><big><em>Coming Soon!</em></big></div>
+  <div>Save &amp; load groups of presets.  Used in conjuction with Firefox Sync your saved preset groups become a "cloud backup" and will be accessible by all your computers.</div>
+  <div>Protip: Using WindowSizer on multiple computers? Awesome! Using the backup/restore feature, you can "copy" your settings from one system to another.</div>
+ </fieldset>
+ <fieldset>
+  <legend>Advanced Settings</legend>
+  <div class="danger">WARNING: Settings in this section could cause undesired behavior, or even break this add-on completely!  Changes made below here are at your own risk!</div>
+  <div id="acceptAdvanced"><button type="button">I accept the responsibility</button></div>
+  <div id="theAdvanced">
+   <div>
+    <form>
+     <div>
+      Oversize Allowance:
+      <select id="oversizeAllowance">
+       <option value="1">0%</option>
+       <option value="1.1">10%</option>
+       <option value="1.2">20%</option>
+       <option value="1.5">50%</option>
+       <option value="2">100%</option>
+       <option value="5">500%</option>
+      </select>
+     </div>
+     <div class="explanation">
+      <small>The oversize allowance defines how much larger than your actual screen size you are allowed to go for setting a width/height.</small>
+     </div>
+    </form>
+   </div>
+   <div style="margin-top: 1em">In case you did mess something up, you can try to <a href="#" id="resetAdvanced">reset advanced settings</a>.</div>
+  </div>
+ </fieldset>
+
  <script src="options.js"></script>
 </body>
 </html>

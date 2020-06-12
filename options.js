@@ -7,7 +7,8 @@ const PREFIX_DOWN = "down-"
 const PREFIX_UP = "up-"
 const MODE_NEW = "new";
 const MODE_EDIT = "edit";
-const OVERSIZE_ALLOWANCE = 1.1;
+const OVERSIZE_ALLOWANCE_DEFAULT = 1.1;
+var oversizeAllowance = OVERSIZE_ALLOWANCE_DEFAULT;
 
 // hasClass, addClass, removeClass functions borrowed (and reformatted) from: https://stackoverflow.com/questions/6787383
 function hasClass(ele,cls)
@@ -32,6 +33,19 @@ function removeClass(ele,cls)
    }
 }
 
+function extend(a, b)
+{
+   for(let key in b)
+   {
+      if(b.hasOwnProperty(key))
+      {
+         a[key] = b[key];
+      }
+   }
+
+   return a;
+}
+
 Array.prototype.move = function(from, to) {
    if(from >=0 && from < this.length && to >= 0 && to < this.length)
    {
@@ -50,7 +64,7 @@ function getValues(mode)
 
    let eW = document.querySelector("#" + mode + "Width");
    let width = parseInt(eW.value);
-   if(Number.isInteger(width) && width > 0 && width <= screen.availWidth * OVERSIZE_ALLOWANCE)
+   if(Number.isInteger(width) && width > 0 && width <= screen.availWidth * oversizeAllowance)
    {
       removeClass(eW,"invalid");
    }
@@ -58,12 +72,11 @@ function getValues(mode)
    {
       hasError = true;
       addClass(eW,"invalid");
-      eW.value = "";
    }
 
    let eH = document.querySelector("#" + mode + "Height");
    let height = parseInt(eH.value);
-   if(Number.isInteger(height) && height > 0 && height <= screen.availHeight * OVERSIZE_ALLOWANCE)
+   if(Number.isInteger(height) && height > 0 && height <= screen.availHeight * oversizeAllowance)
    {
       removeClass(eH,"invalid");
    }
@@ -71,7 +84,6 @@ function getValues(mode)
    {
       hasError = true;
       addClass(eH,"invalid");
-      eH.value = "";
    }
 
    let eN = document.querySelector("#" + mode + "Name");
@@ -84,7 +96,6 @@ function getValues(mode)
    {
       hasError = true;
       addClass(eN,"invalid");
-      eN.value = "";
    }
 
    let result = {"valid": !hasError};
@@ -106,6 +117,17 @@ function getValues(mode)
       result.name = name;
    }
    return result;
+}
+
+async function loadAdvancedSettings()
+{
+   let storage = await browser.storage.local.get("advanced");
+   let advanced = storage.advanced;
+   if(storage.advanced !== undefined && storage.advanced.oversizeAllowance !== undefined)
+   {
+      oversizeAllowance = storage.advanced.oversizeAllowance;
+   }
+   document.querySelector("#oversizeAllowance").value = oversizeAllowance;
 }
 
 async function displayPresets()
@@ -216,6 +238,11 @@ async function displayPresets()
    }
 
    showCurrentSize();
+}
+
+function showScreenSize()
+{
+   document.querySelector("#screenSize").textContent = screen.availWidth + "x" + screen.availHeight;
 }
 
 function showCurrentSize()
@@ -413,7 +440,43 @@ async function moveUp(e)
    e.preventDefault();
 }
 
-window.addEventListener("resize", showCurrentSize);
-document.addEventListener("DOMContentLoaded", displayPresets);
+async function setOversizeAllowance()
+{
+   let storage = await browser.storage.local.get("advanced");
+   let advanced = storage.advanced;
+   extend(advanced,{"oversizeAllowance": Number(document.querySelector("#oversizeAllowance").value) });
+   await browser.storage.local.set({"advanced": advanced});
+}
+
+async function resetAdvanced()
+{
+   await browser.storage.local.set({"advanced": {"oversizeAllowance": OVERSIZE_ALLOWANCE_DEFAULT} });
+   loadAdvancedSettings();
+}
+
+async function showAdvanced()
+{
+   document.querySelector("#acceptAdvanced").style.display = 'none';
+   document.querySelector("#theAdvanced").style.display = 'block';
+}
+
+async function doOnLoad()
+{
+   loadAdvancedSettings();
+   displayPresets();
+   showScreenSize();
+}
+
+async function doOnResize()
+{
+   showCurrentSize();
+   showScreenSize();
+}
+
+window.addEventListener("resize", doOnResize);
+document.addEventListener("DOMContentLoaded", doOnLoad);
 document.querySelector("#addNew").addEventListener("click", addPreset);
 document.querySelector("#currentSize").addEventListener("click", useCurrentSize);
+document.querySelector("#oversizeAllowance").addEventListener("change", setOversizeAllowance);
+document.querySelector("#acceptAdvanced button").addEventListener("click", showAdvanced);
+document.querySelector("#resetAdvanced").addEventListener("click", resetAdvanced);

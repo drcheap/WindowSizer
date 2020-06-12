@@ -1,3 +1,15 @@
+fieldset {
+   margin-bottom: 1em;
+}
+
+fieldset > div {
+   margin-bottom: 1em;
+}
+
+fieldset > div:last-child {
+   margin-bottom: 0;
+}
+
 th {
    text-align: left;
 }
@@ -27,4 +39,17 @@ th, td {
 
 .imgDown, .imgUp {
    cursor: pointer;
+}
+
+.danger {
+   text-dectoration: italic;
+   color: red;
+}
+
+#theAdvanced {
+   display: none;
+}
+
+.comingSoon {
+   color: grey;
 }
