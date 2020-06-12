@@ -1,7 +1,7 @@
 {
    "manifest_version": 2,
    "name": "WindowSizer",
-   "version": "1.2.1",
+   "version": "1.3.0",
    "author": "Dr. Cheap",
    "description": "Quickly resize the window to one of your favorite sizes",
    "homepage_url": "https://addons.mozilla.org/firefox/addon/windowsizer",
@@ -9,7 +9,7 @@
 
    "applications": {
       "gecko": {
-         "id": "windowsizerdev@drcheap.com"
+         "id": "windowsizer@drcheap.com"
       }
    },
 
