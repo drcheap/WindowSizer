@@ -89,15 +89,6 @@ function getValues(mode)
 
    let eN = document.querySelector("#" + mode + "Name");
    let name = eN.value;
-   if(name.length > 0)
-   {
-      removeClass(eN,"invalid");
-   }
-   else
-   {
-      hasError = true;
-      addClass(eN,"invalid");
-   }
 
    let result = {"valid": !hasError};
    let eS = document.querySelector("#" + mode + "Status");
@@ -264,9 +255,7 @@ async function useCurrentSize()
 {
    let pendingEdit = document.querySelector("#editStatus");
    let mode = pendingEdit == null ? MODE_NEW : MODE_EDIT;
-
    let currentWindow = await browser.windows.getCurrent();
-
    document.querySelector("#" + mode + "Width").value = currentWindow.width;
    document.querySelector("#" + mode + "Height").value = currentWindow.height;
 }
