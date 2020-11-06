@@ -47,11 +47,21 @@
    <input type="checkbox" id="keepActionMenuOnClick" value="yes"> Keep toolbar menu open after choosing a preset
   </form>
  </fieldset>
- <fieldset class="comingSoon">
-  <legend>Backup/Restore</legend>
-  <div><big><em>Coming Soon!</em></big></div>
-  <div>Save &amp; load groups of presets.  Used in conjuction with Firefox Sync your saved preset groups become a "cloud backup" and will be accessible by all your computers.</div>
-  <div>Protip: Using WindowSizer on multiple computers? Awesome! Using the backup/restore feature, you can "copy" your settings from one system to another.</div>
+ <fieldset>
+  <legend>Backup/Restore (experimental)</legend>
+  <div>
+   <p>Save all your WindowSizer settings so that you can restore them later!  You can even save multiple different groups of settings (sort of like "profiles"), each with a memorable name of your choice.</p>
+   <p>If you have <a href="https://support.mozilla.org/en-US/products/firefox/sync" target="_blank">Firefox Sync</a> enabled for Add-Ons, your backups will be saved to the Mozilla servers as well.  They will then be accessible by your other computers that are logged in to the same account.</p>
+   <p>Important note: This feature is still experimental as there are some quirks about how the sync mechanism works.  For best results, perform a manual sync <strong>before</strong> creating a backup, then create your backup, then perform a manual sync <strong>again</strong>.</p>
+  </div>
+  <div>
+   <form>
+    <input type="text" id="newBackupName" size="40" maxlength="50" placeholder="(Enter a name here)"> <button id="saveNewBackup">Create New Backup</button>
+   </form>
+  </div>
+  <div>
+   <div id="backupList"></div>
+  </div>
  </fieldset>
  <fieldset>
   <legend>Advanced Settings</legend>

@@ -7,7 +7,7 @@
    "homepage_url": "https://addons.mozilla.org/firefox/addon/windowsizer",
    "permissions": ["storage"],
 
-   "applications": {
+   "browser_specific_settings": {
       "gecko": {
          "id": "windowsizer@drcheap.com"
       }

@@ -1,5 +1,6 @@
 const PREFIX_PRESET = "preset-"; // Must match the one in common.js
 const PREFIX_EDIT = "edit-";
+const PREFIX_RESTORE = "restore-";
 const PREFIX_REMOVE = "remove-";
 const PREFIX_SAVE = "save-";
 const PREFIX_CANCEL = "cancel-";
@@ -10,6 +11,13 @@ const MODE_EDIT = "edit";
 const OVERSIZE_ALLOWANCE_DEFAULT = 1.1;
 var keepActionMenuOnClick = false;
 var oversizeAllowance = OVERSIZE_ALLOWANCE_DEFAULT;
+
+function makeID()
+{
+   // This is not *perfect* but works as long as it's not called multiple times in the same millisecond (o).(O)
+   return new Date().valueOf();
+}
+
 
 // hasClass, addClass, removeClass functions borrowed (and reformatted) from: https://stackoverflow.com/questions/6787383
 function hasClass(ele,cls)
@@ -140,7 +148,7 @@ async function displayPresets()
    let existingRows = document.querySelectorAll(".presetItem");
    for(let row of existingRows)
    {
-      console.log("(display) Remove item row");
+      console.log("(displayPreset) Remove item row");
       row.remove();
    };
 
@@ -150,7 +158,7 @@ async function displayPresets()
       let presetNum = i + 1;
       let isFirst = (i == 0);
       let isLast = (i == presetCount - 1);
-      console.log("(display) Add item " + presetNum + ": " + presets[i].name);
+      console.log("(displayPreset) Add item " + presetNum + ": " + presets[i].name);
 
       let myId = presets[i].id;
 
@@ -173,7 +181,7 @@ async function displayPresets()
          imgDown.title = "Move Down";
          imgDown.id = PREFIX_DOWN + i;
          addClass(imgDown,"imgDown");
-         imgDown.addEventListener('click', moveDown);
+         imgDown.addEventListener("click", moveDown);
       }
       tdP.appendChild(imgDown);
 
@@ -192,7 +200,7 @@ async function displayPresets()
          imgUp.title = "Move Up";
          imgUp.id = PREFIX_UP + i;
          addClass(imgUp,"imgUp");
-         imgUp.addEventListener('click', moveUp);
+         imgUp.addEventListener("click", moveUp);
       }
       tdP.appendChild(imgUp);
 
@@ -220,14 +228,14 @@ async function displayPresets()
       btnE.type = "button";
       btnE.id = PREFIX_EDIT + myId;
       btnE.textContent = "Edit";
-      btnE.addEventListener('click', editPreset);
+      btnE.addEventListener("click", editPreset);
       tdA.appendChild(btnE);
 
       let btnR = document.createElement("button");
       btnR.type = "button";
       btnR.id = PREFIX_REMOVE + myId;
       btnR.textContent = "Remove";
-      btnR.addEventListener('click', removePreset);
+      btnR.addEventListener("click", removePreset);
       tdA.appendChild(btnR);
 
       tr.appendChild(tdA);
@@ -262,13 +270,15 @@ async function useCurrentSize()
 
 async function addPreset(e)
 {
+   e.preventDefault();
+
    let values = getValues(MODE_NEW);
    if(values.valid)
    {
       console.log("(add) Adding preset: " + values.width + "x" + values.height + " " + values.name);
 
       let item = {
-         "id": new Date().valueOf(),      // This is not *perfect* but works as long as two presets aren't created in the same millisecond (o).(O)
+         "id": makeID(),
          "width": values.width,
          "height": values.height,
          "name": values.name
@@ -280,12 +290,12 @@ async function addPreset(e)
       await browser.storage.local.set({"presets": presets});
       displayPresets();
    }
-
-   e.preventDefault();
 }
 
 async function editPreset(e)
 {
+   e.preventDefault();
+
    let myId = getId(e.target.id,PREFIX_EDIT);
 
    let pendingEdit = document.querySelector("#editStatus");
@@ -338,24 +348,24 @@ async function editPreset(e)
    btnS.type = "button";
    btnS.id = PREFIX_SAVE + myId;
    btnS.textContent = "Save";
-   btnS.addEventListener('click', saveEdits);
+   btnS.addEventListener("click", saveEdits);
    tdA.appendChild(btnS);
 
    let btnC = document.createElement("button");
    btnC.type = "button";
    btnC.id = PREFIX_CANCEL + myId;
    btnC.textContent = "Cancel";
-   btnC.addEventListener('click', cancelEdits);
+   btnC.addEventListener("click", cancelEdits);
    tdA.appendChild(btnC);
 
    let tdS = tr.children[6];
    tdS.id = "editStatus";
-
-   e.preventDefault();
 }
 
 async function saveEdits(e)
 {
+   e.preventDefault();
+
    let values = getValues(MODE_EDIT);
    if(values.valid)
    {
@@ -380,8 +390,6 @@ async function saveEdits(e)
       await browser.storage.local.set({"presets": presets});
       displayPresets();
    }
-
-   e.preventDefault();
 }
 
 async function cancelEdits()
@@ -392,6 +400,8 @@ async function cancelEdits()
 
 async function removePreset(e)
 {
+   e.preventDefault();
+
    let myId = getId(e.target.id,PREFIX_REMOVE);
    console.log("(remove) Request to remove id=" + myId);
 
@@ -410,12 +420,12 @@ async function removePreset(e)
 
    await browser.storage.local.set({"presets": presets});
    displayPresets();
-
-   e.preventDefault();
 }
 
 async function moveDown(e)
 {
+   e.preventDefault();
+
    let myPos = getId(e.target.id,PREFIX_DOWN);
    console.log("(move) Moving down from " + myPos);
 
@@ -424,12 +434,12 @@ async function moveDown(e)
    presets.move(myPos,myPos + 1);
    await browser.storage.local.set({"presets": presets});
    displayPresets();
-
-   e.preventDefault();
 }
 
 async function moveUp(e)
 {
+   e.preventDefault();
+
    let myPos = getId(e.target.id,PREFIX_UP);
    console.log("(move) Moving up from " + myPos);
 
@@ -438,8 +448,6 @@ async function moveUp(e)
    presets.move(myPos,myPos - 1);
    await browser.storage.local.set({"presets": presets});
    displayPresets();
-
-   e.preventDefault();
 }
 
 async function setKeepActionMenuOnClick()
@@ -466,16 +474,16 @@ async function resetAdvanced()
 
 async function showAdvanced()
 {
-   document.querySelector("#acceptAdvanced").style.display = 'none';
-   document.querySelector("#theAdvanced").style.display = 'block';
+   document.querySelector("#acceptAdvanced").style.display = "none";
+   document.querySelector("#theAdvanced").style.display = "block";
 }
 
 async function doOnLoad()
 {
-   loadOptions();
-   loadAdvancedSettings();
    displayPresets();
-   showScreenSize();
+   loadOptions();
+   displayBackups();
+   loadAdvancedSettings();
 }
 
 async function updateSizes()
@@ -484,11 +492,215 @@ async function updateSizes()
    showScreenSize();
 }
 
+async function displayBackups()
+{
+   let storage = await browser.storage.sync.get("backups");
+   if(storage.backups === undefined)
+   {
+      console.log("(displayBackup) Initializing backups storage...");
+      storage.backups = [];
+      await browser.storage.sync.set({"backups": storage.backups});
+   }
+
+   let backups = storage.backups;
+
+   let existingRows = document.querySelectorAll(".backupItem");
+   for(let row of existingRows)
+   {
+      console.log("(displayBackup) Remove item row");
+      row.remove();
+   };
+
+   let backupCount = backups.length;
+   for(let i = 0;i < backupCount;i++)
+   {
+      let buId = backups[i].id;
+
+      console.log("(displayBackup) Add item " + buId + ": " + backups[i].name);
+
+      let isLast = (i == backupCount - 1);
+      let bList = document.querySelector("#backupList");
+
+      let buItem = document.createElement("div");
+      buItem.className = "backupItem";
+
+      let btnR = document.createElement("button");
+      btnR.type = "button";
+      btnR.id = PREFIX_RESTORE + buId;
+      btnR.textContent = "Restore";
+      btnR.addEventListener("click", backupAction);
+      buItem.appendChild(btnR);
+
+      buItem.appendChild(document.createTextNode(" "));
+
+      let btnD = document.createElement("button");
+      btnD.type = "button";
+      btnD.id = PREFIX_REMOVE + buId;
+      btnD.textContent = "Delete";
+      btnD.addEventListener("click", backupAction);
+      buItem.appendChild(btnD);
+
+      let savedAt = new Date(backups[i].saveTime);
+      buItem.appendChild(document.createTextNode(" " + backups[i].name + " (Saved at: " + savedAt.toLocaleString() + ")"));
+
+      bList.appendChild(buItem);
+   }
+}
+
+function backupAction(e)
+{
+   e.preventDefault();
+
+   let myId = e.target.id;
+   let buId = -1;
+   if(myId.startsWith(PREFIX_RESTORE))
+   {
+      restoreBackup(getId(myId,PREFIX_RESTORE));
+   }
+   else if(myId.startsWith(PREFIX_REMOVE))
+   {
+      deleteBackup(getId(myId,PREFIX_REMOVE));
+   }
+}
+
+async function restoreBackup(buId)
+{
+   let storage = await browser.storage.sync.get("backups");
+   let backups = storage.backups;
+
+   let foundIndex = -1;
+
+   if(buId !== undefined)
+   {
+      for(let i = 0;i < backups.length;i++)
+      {
+         if(backups[i].id === buId)
+         {
+            console.log("(restoreBackup) Found it at i=" + i);
+            foundIndex = i;
+            break;
+         }
+      }
+   }
+
+   if(foundIndex == -1)
+   {
+      console.log("(restoreBackup) Not found, no changes made");
+   }
+   else
+   {
+      if(confirm("Restoring '" + backups[foundIndex].name + "' will overwrite your current options!"))
+      {
+         console.log("(restoreBackup) restoring");
+
+         let storageToLoad = backups[foundIndex].storage;
+         await browser.storage.local.set(storageToLoad);
+         doOnLoad();
+      }
+   }
+}
+
+async function deleteBackup(buId)
+{
+   let storage = await browser.storage.sync.get("backups");
+   let backups = storage.backups;
+
+   let foundIndex = -1;
+
+   if(buId !== undefined)
+   {
+      for(let i = 0;i < backups.length;i++)
+      {
+         if(backups[i].id === buId)
+         {
+            console.log("(deleteBackup) Found it at i=" + i);
+            foundIndex = i;
+            break;
+         }
+      }
+   }
+
+   if(foundIndex == -1)
+   {
+      console.log("(deleteBackup) Not found, no changes made");
+   }
+   else
+   {
+      if(confirm("Backup '" + backups[foundIndex].name + "' will be removed forever!"))
+      {
+         console.log("(deleteBackup) Removing");
+         backups.splice(foundIndex,1);
+         await browser.storage.sync.set({"backups": backups});
+         displayBackups();
+      }
+   }
+}
+
+async function saveBackup(e)
+{
+   e.preventDefault();
+
+   let storage = await browser.storage.sync.get("backups");
+   let backups = storage.backups;
+
+   let buName = document.querySelector("#newBackupName").value;
+   if(buName.length < 1)
+   {
+      buName = "Untitled";
+   }
+
+   let foundIndex = -1;
+
+   for(let i = 0;i < backups.length;i++)
+   {
+      if(backups[i].name === buName)
+      {
+         console.log("(saveBackup) Found it at i=" + i);
+         foundIndex = i;
+         break;
+      }
+   }
+
+   let storageToSave = await browser.storage.local.get(["version","presets","options","advanced"]);
+   if(foundIndex == -1)
+   {
+      console.log("(saveBackup) Not found, adding it");
+
+      let buNew = {
+         "id": makeID(),
+         "name": buName,
+         "saveTime": new Date().getTime(),
+         "storage": storageToSave
+
+      };
+
+      backups.push(buNew);
+      await browser.storage.sync.set({"backups": backups});
+      displayBackups();
+   }
+   else
+   {
+      if(confirm("Existing backup '" + backups[foundIndex].name + "' will be replaced with current options!"))
+      {
+         console.log("(saveBackup) Updating it");
+
+         backups[foundIndex].saveTime = new Date().getTime();
+         backups[foundIndex].storage = storageToSave;
+         await browser.storage.sync.set({"backups": backups});
+         displayBackups();
+      }
+   }
+
+   document.querySelector("#newBackupName").value = "";
+}
+
+
 window.addEventListener("resize", updateSizes);
 document.addEventListener("DOMContentLoaded", doOnLoad);
 document.querySelector("#addNew").addEventListener("click", addPreset);
 document.querySelector("#currentSize").addEventListener("click", useCurrentSize);
 document.querySelector("#keepActionMenuOnClick").addEventListener("change", setKeepActionMenuOnClick);
+document.querySelector("#saveNewBackup").addEventListener("click", saveBackup);
 document.querySelector("#oversizeAllowance").addEventListener("change", setOversizeAllowance);
 document.querySelector("#acceptAdvanced button").addEventListener("click", showAdvanced);
 document.querySelector("#resetAdvanced").addEventListener("click", resetAdvanced);
