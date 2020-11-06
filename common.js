@@ -26,7 +26,7 @@ async function resizeWindow(newWidth, newHeight)
    };
 
    let currentWindow = await browser.windows.getCurrent();
-   browser.windows.update(currentWindow.id, updateInfo);
+   await browser.windows.update(currentWindow.id, updateInfo);
 }
 
 async function getShortcutKey(commandName)

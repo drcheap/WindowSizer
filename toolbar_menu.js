@@ -43,6 +43,8 @@ async function doMenuItemClick(e)
 {
    console.log("(menu) item clicked");
 
+   e.preventDefault();
+
    let storage = await browser.storage.local.get("options");
    let options = storage.options;
    let keepActionMenuOnClick = storage.options.keepActionMenuOnClick !== undefined && storage.options.keepActionMenuOnClick;
@@ -59,17 +61,20 @@ async function doMenuItemClick(e)
       await applyPreset(presetId);
    }
 
-   if(!keepActionMenuOnClick)
+   if(keepActionMenuOnClick)
+   {
+      showCurrentSize();
+   }
+   else
    {
       window.close();
    }
-
-   e.preventDefault();
 }
 
-function showCurrentSize()
+async function showCurrentSize()
 {
-   document.querySelector("#currentSize").textContent = window.outerWidth + "x" + window.outerHeight;
+   let currentWindow = await browser.windows.getCurrent();
+   document.querySelector("#currentSize").textContent = currentWindow.width + "x" + currentWindow.height;
 }
 
 document.addEventListener("DOMContentLoaded", updateMenuWithPresets);

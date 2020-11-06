@@ -256,9 +256,10 @@ function showScreenSize()
    document.querySelector("#screenSize").textContent = screen.availWidth + "x" + screen.availHeight;
 }
 
-function showCurrentSize()
+async function showCurrentSize()
 {
-   document.querySelector("#currentSize").textContent = window.outerWidth + "x" + window.outerHeight + " (click to use)";
+   let currentWindow = await browser.windows.getCurrent();
+   document.querySelector("#currentSize").textContent = currentWindow.width + "x" + currentWindow.height + " (click to use)";
 }
 
 function useCurrentSize()
@@ -487,13 +488,14 @@ async function doOnLoad()
    showScreenSize();
 }
 
-async function doOnResize()
+async function updateSizes()
 {
+   console.log("updateSizes");
    showCurrentSize();
    showScreenSize();
 }
 
-window.addEventListener("resize", doOnResize);
+window.addEventListener("resize", updateSizes);
 document.addEventListener("DOMContentLoaded", doOnLoad);
 document.querySelector("#addNew").addEventListener("click", addPreset);
 document.querySelector("#currentSize").addEventListener("click", useCurrentSize);
@@ -501,3 +503,5 @@ document.querySelector("#keepActionMenuOnClick").addEventListener("change", setK
 document.querySelector("#oversizeAllowance").addEventListener("change", setOversizeAllowance);
 document.querySelector("#acceptAdvanced button").addEventListener("click", showAdvanced);
 document.querySelector("#resetAdvanced").addEventListener("click", resetAdvanced);
+
+setInterval(updateSizes,300);  // Because the "resize" event doesn't fire unless content is reflowed due to the resize.  Also handles when moving window between different sized screens!
