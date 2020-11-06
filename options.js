@@ -247,8 +247,6 @@ async function displayPresets()
       let lastRow = document.querySelector("#addPreset");
       lastRow.parentNode.insertBefore(tr,lastRow);
    }
-
-   showCurrentSize();
 }
 
 function showScreenSize()
@@ -266,8 +264,11 @@ function useCurrentSize()
 {
    let pendingEdit = document.querySelector("#editStatus");
    let mode = pendingEdit == null ? MODE_NEW : MODE_EDIT;
-   document.querySelector("#" + mode + "Width").value = window.outerWidth;
-   document.querySelector("#" + mode + "Height").value = window.outerHeight;
+
+   let currentWindow = await browser.windows.getCurrent();
+
+   document.querySelector("#" + mode + "Width").value = currentWindow.width;
+   document.querySelector("#" + mode + "Height").value = currentWindow.height;
 }
 
 async function addPreset(e)
@@ -490,7 +491,6 @@ async function doOnLoad()
 
 async function updateSizes()
 {
-   console.log("updateSizes");
    showCurrentSize();
    showScreenSize();
 }
