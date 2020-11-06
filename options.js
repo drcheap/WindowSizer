@@ -260,7 +260,7 @@ async function showCurrentSize()
    document.querySelector("#currentSize").textContent = currentWindow.width + "x" + currentWindow.height + " (click to use)";
 }
 
-function useCurrentSize()
+async function useCurrentSize()
 {
    let pendingEdit = document.querySelector("#editStatus");
    let mode = pendingEdit == null ? MODE_NEW : MODE_EDIT;
