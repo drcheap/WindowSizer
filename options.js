@@ -8,6 +8,7 @@ const PREFIX_UP = "up-"
 const MODE_NEW = "new";
 const MODE_EDIT = "edit";
 const OVERSIZE_ALLOWANCE_DEFAULT = 1.1;
+var keepActionMenuOnClick = false;
 var oversizeAllowance = OVERSIZE_ALLOWANCE_DEFAULT;
 
 // hasClass, addClass, removeClass functions borrowed (and reformatted) from: https://stackoverflow.com/questions/6787383
@@ -119,11 +120,21 @@ function getValues(mode)
    return result;
 }
 
+async function loadOptions()
+{
+   let storage = await browser.storage.local.get("options");
+   let options = storage.options;
+
+   keepActionMenuOnClick = storage.options.keepActionMenuOnClick !== undefined && storage.options.keepActionMenuOnClick;
+   document.querySelector("#keepActionMenuOnClick").checked = keepActionMenuOnClick;
+}
+
 async function loadAdvancedSettings()
 {
    let storage = await browser.storage.local.get("advanced");
    let advanced = storage.advanced;
-   if(storage.advanced !== undefined && storage.advanced.oversizeAllowance !== undefined)
+
+   if(storage.advanced.oversizeAllowance !== undefined)
    {
       oversizeAllowance = storage.advanced.oversizeAllowance;
    }
@@ -440,6 +451,14 @@ async function moveUp(e)
    e.preventDefault();
 }
 
+async function setKeepActionMenuOnClick()
+{
+   let storage = await browser.storage.local.get("options");
+   let options = storage.options;
+   extend(options,{"keepActionMenuOnClick": document.querySelector("#keepActionMenuOnClick").checked});
+   await browser.storage.local.set({"options": options});
+}
+
 async function setOversizeAllowance()
 {
    let storage = await browser.storage.local.get("advanced");
@@ -462,6 +481,7 @@ async function showAdvanced()
 
 async function doOnLoad()
 {
+   loadOptions();
    loadAdvancedSettings();
    displayPresets();
    showScreenSize();
@@ -477,6 +497,7 @@ window.addEventListener("resize", doOnResize);
 document.addEventListener("DOMContentLoaded", doOnLoad);
 document.querySelector("#addNew").addEventListener("click", addPreset);
 document.querySelector("#currentSize").addEventListener("click", useCurrentSize);
+document.querySelector("#keepActionMenuOnClick").addEventListener("change", setKeepActionMenuOnClick);
 document.querySelector("#oversizeAllowance").addEventListener("change", setOversizeAllowance);
 document.querySelector("#acceptAdvanced button").addEventListener("click", showAdvanced);
 document.querySelector("#resetAdvanced").addEventListener("click", resetAdvanced);

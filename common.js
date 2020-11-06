@@ -10,7 +10,7 @@ async function applyPreset(presetId)
    {
       if(presets[i].id == presetId)
       {
-         resizeWindow(presets[i].width,presets[i].height);
+         await resizeWindow(presets[i].width,presets[i].height);
          break;
       }
    }

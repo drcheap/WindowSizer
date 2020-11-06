@@ -39,18 +39,29 @@ async function updateMenuWithPresets()
    }
 }
 
-function doMenuItemClick(e)
+async function doMenuItemClick(e)
 {
-   let myId = e.target.id;
+   console.log("(menu) item clicked");
 
+   let storage = await browser.storage.local.get("options");
+   let options = storage.options;
+   let keepActionMenuOnClick = storage.options.keepActionMenuOnClick !== undefined && storage.options.keepActionMenuOnClick;
+
+   let myId = e.target.id;
    if(myId === "customize")
    {
       browser.runtime.openOptionsPage();
+      keepActionMenuOnClick = false;  // Force menu closed in this case
    }
    else if(myId.startsWith(PREFIX_PRESET))
    {
       let presetId = myId.substring(PREFIX_PRESET.length);
-      applyPreset(presetId);
+      await applyPreset(presetId);
+   }
+
+   if(!keepActionMenuOnClick)
+   {
+      window.close();
    }
 
    e.preventDefault();
