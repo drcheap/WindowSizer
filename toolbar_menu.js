@@ -6,16 +6,12 @@ async function updateMenuWithPresets()
    let presets = storage.presets;
    for(let i = 0;i < presets.length;i++)
    {
-      console.log("(menu) Add item " + (i + 1) + ": " + presets[i].name);
+      let position = i + 1;
+      console.log("(menu) Add item " + position + ": " + presets[i].name);
 
       let linkText = presets[i].width + "x" + presets[i].height + " " + presets[i].name;
-      let numberText = "&nbsp;";
-      if(i < 9)
-      {
-         numberText = (i + 1) + ": ";
-      }
-
-      let shortcutKey = await getShortcutKey(PREFIX_PRESET + (i + 1));
+      let numberText = position + ": ";
+      let shortcutKey = await getShortcutKey(PREFIX_PRESET + position);
 
       let tr = document.createElement("tr");
 
