@@ -124,7 +124,7 @@ async function loadOptions()
    let storage = await browser.storage.local.get("options");
    let options = storage.options;
 
-   keepActionMenuOnClick = storage.options.keepActionMenuOnClick !== undefined && storage.options.keepActionMenuOnClick;
+   keepActionMenuOnClick = options.keepActionMenuOnClick !== undefined && options.keepActionMenuOnClick;
    document.querySelector("#keepActionMenuOnClick").checked = keepActionMenuOnClick;
 }
 
@@ -133,9 +133,9 @@ async function loadAdvancedSettings()
    let storage = await browser.storage.local.get("advanced");
    let advanced = storage.advanced;
 
-   if(storage.advanced.oversizeAllowance !== undefined)
+   if(advanced.oversizeAllowance !== undefined)
    {
-      oversizeAllowance = storage.advanced.oversizeAllowance;
+      oversizeAllowance = advanced.oversizeAllowance;
    }
    document.querySelector("#oversizeAllowance").value = oversizeAllowance;
 }

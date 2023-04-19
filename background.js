@@ -1,3 +1,5 @@
+"use strict";
+
 const CURRENT_STORAGE_VERSION = 2;
 
 async function initialize(details)
