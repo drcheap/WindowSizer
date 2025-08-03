@@ -1,7 +1,7 @@
 {
    "manifest_version": 2,
    "name": "WindowSizer",
-   "version": "1.4.2",
+   "version": "1.5.0",
    "author": "Dr. Cheap",
    "description": "Quickly resize the window to one of your favorite sizes",
    "homepage_url": "https://github.com/drcheap/WindowSizer",
@@ -30,7 +30,6 @@
    "browser_action": {
       "browser_style": true,
       "default_title": "WindowSizer",
-      "default_popup": "toolbar_menu.html",
       "default_icon": {
          "16": "icons/ws_icon_16_dark.png",
          "32": "icons/ws_icon_32_dark.png"

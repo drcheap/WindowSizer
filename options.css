@@ -32,9 +32,13 @@ th, td {
    margin-top: 0.5em;
 }
 
-#currentSize, #getCurrentSize {
+#currentSize, #getCurrentSize, #quickResizeInfo {
    color: rgb(0, 0, 238);
    cursor: pointer;
+}
+
+#quickResizeInfo {
+   cursor: help;
 }
 
 .imgDown, .imgUp {
