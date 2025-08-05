@@ -125,8 +125,6 @@ async function loadOptions()
    keepActionMenuOnClick = options.keepActionMenuOnClick !== undefined && options.keepActionMenuOnClick;
    document.querySelector("#keepActionMenuOnClick").checked = keepActionMenuOnClick;
    document.querySelector("#keepActionMenuOnClick").disabled = document.querySelector("#useQuickResizeMode").checked;
-
-   applyQuickResizeSetting();
 }
 
 async function loadAdvancedSettings()

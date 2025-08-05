@@ -7,7 +7,7 @@ A simple, customizeable window resizer
   - Easily switch between them via toolbar menu
   - Even more quickly switch between them via hotkeys
   - Backup & restore with Sync compatiblity
-  - Compatible with private windows & requires *no browser privileges*
+  - Compatible with private windows & requires *no sensitive browser privileges*
 
 Inspired by the old Firefox add-on [Browsizer]
 
