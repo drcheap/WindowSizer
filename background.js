@@ -1,3 +1,16 @@
+/**
+ * We need to cache this setting in global state, because looking up the user's preference from storage is async.
+ * Making the async call in the browserAction click handler can lose "transient activation" state and results in "user gesture" errors.
+ * This needs to be updated any time the Quick Resize option is changed OR the number of presets changes to/from 0.
+ */
+var _quickResizePresetID = null;
+async function updateCachedQuickResize()
+{
+   const storage = await browser.storage.local.get(["options","presets"]);
+   _quickResizePresetID = storage.options.useQuickResizeMode && storage.presets.length > 0 ? storage.presets[0].id : null;
+   console.debug("Updated _quickResizePresetID to " + _quickResizePresetID);
+}
+
 async function initialize(details)
 {
    console.debug("Initializing...");
@@ -58,6 +71,7 @@ async function initialize(details)
    }
 
    applyQuickResizeSetting();
+   updateCachedQuickResize();
 
    console.debug("Initialization complete...");
    console.debug("   Storage version: " + storage.version);
@@ -66,10 +80,20 @@ async function initialize(details)
    console.debug("   Advanced count: " + Object.keys(storage.advanced).length);
 }
 
+function storageChangeHandler(changes, areaName)
+{
+   console.debug("Storage change for " + areaName, changes);
+
+   if(areaName === "local" && (changes.options || changes.presets))
+   {
+      updateCachedQuickResize();
+   }
+}
+
 // Hotkey handler
 async function handleCommand(command)
 {
-   console.debug("handling command: " + command);
+   console.debug("Handling command: " + command);
 
    if(command.startsWith(PREFIX_PRESET))
    {
@@ -84,18 +108,13 @@ async function handleCommand(command)
    }
 }
 
-async function toolbarClickHandler()
+function toolbarClickHandler()
 {
    console.debug("Toolbar clicked");
 
-   const storage = await browser.storage.local.get(["presets","options"]);
-   const presets = storage.presets;
-   const options = storage.options;
-
-   useQuickResizeMode = options.useQuickResizeMode !== undefined && options.useQuickResizeMode;
-   if(useQuickResizeMode && presets.length > 0)
+   if(_quickResizePresetID)
    {
-      applyPreset(presets[0].id);
+      applyPreset(_quickResizePresetID);
    }
    else
    {
@@ -104,6 +123,7 @@ async function toolbarClickHandler()
 }
 
 browser.runtime.onInstalled.addListener(initialize);
+browser.storage.onChanged.addListener(storageChangeHandler);
 browser.commands.onCommand.addListener(handleCommand);
 browser.browserAction.onClicked.addListener(toolbarClickHandler);
 
