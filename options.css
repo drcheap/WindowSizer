@@ -1,5 +1,23 @@
+body {
+   font-size: 70%;
+}
+
+a, a:visited {
+   color: var(--color-link);
+   text-decoration: none;
+}
+
+a:hover, a:active {
+   color: var(--color-attention);
+}
+
 fieldset {
    margin-bottom: 1em;
+   border: 1px solid var(--color-monochrome-neutral);
+}
+
+fieldset > legend {
+   font-size: 110%;
 }
 
 fieldset > div {
@@ -8,6 +26,10 @@ fieldset > div {
 
 fieldset > div:last-child {
    margin-bottom: 0;
+}
+
+input, button, select {
+   color: var(--color-text);
 }
 
 th {
@@ -21,20 +43,24 @@ th, td {
 }
 
 .invalid {
-   outline: 2px groove red;
+   outline: 2px groove var(--color-attention);
 }
 
 .errmsg {
-   color: red;
+   color: var(--color-attention);
 }
 
 #currentSizeContainer {
    margin-top: 0.5em;
 }
 
-#currentSize, #getCurrentSize, #quickResizeInfo {
-   color: rgb(0, 0, 238);
+#currentSize, #quickResizeInfo {
+   color: var(--color-link);
    cursor: pointer;
+}
+
+#currentSize:hover, #quickResizeInfo:hover {
+   color: var(--color-attention);
 }
 
 #quickResizeInfo {
@@ -47,13 +73,9 @@ th, td {
 
 .danger {
    text-dectoration: italic;
-   color: red;
+   color: var(--color-attention);
 }
 
 #theAdvanced {
    display: none;
-}
-
-.comingSoon {
-   color: grey;
 }

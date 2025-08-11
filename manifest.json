@@ -1,7 +1,7 @@
 {
    "manifest_version": 2,
    "name": "WindowSizer",
-   "version": "1.5.2",
+   "version": "1.6.0",
    "author": "Dr. Cheap",
    "description": "Quickly resize the window to one of your favorite sizes",
    "homepage_url": "https://github.com/drcheap/WindowSizer",
@@ -24,7 +24,7 @@
 
    "options_ui": {
      "page": "options.html",
-     "browser_style": true
+     "browser_style": false
    },
 
    "browser_action": {

@@ -8,6 +8,7 @@ A simple, customizeable window resizer
   - Even more quickly switch between them via hotkeys
   - Backup & restore with Sync compatiblity
   - Compatible with private windows & requires *no sensitive browser privileges*
+  - Dark mode friendly
 
 Inspired by the old Firefox add-on [Browsizer]
 

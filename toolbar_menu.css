@@ -1,17 +1,31 @@
+body {
+   margin: 0.5rem;
+}
+
 a {
    display: inline-block;
    width: 100%;
-   color: black;
+   color: var(--color-text);
    font-size: 120%;
    text-decoration: none;
 }
 
 a:hover {
-   background-color: lightgrey;
+   color: var(--color-text-highlight);
+   background-color: var(--color-bg-highlight);
 }
 
-.panel {
-  margin: 5px;
+.wsHeader {
+   padding-top: 0.75rem;
+   padding-bottom: 0.75rem;
+   border-bottom: 0.15rem solid var(--color-monochrome-neutral);
+   font-size: 130%;
+   font-weight: bold;
+}
+
+.separator {
+   min-height: 0.1rem;
+   background-color: var(--color-monochrome-neutral);
 }
 
 .presetIndex {
@@ -19,10 +33,6 @@ a:hover {
 }
 
 #sizeIndicator {
-   padding: 3px;
+   padding-top: 0.125rem;
+   padding-bottom: 0.125rem;
 }
-
-#customize {
-   border: 1px solid #ffffff
-}
-

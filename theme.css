@@ -1,0 +1,34 @@
+:root {
+
+   /* Monochrome colors for darker-to-lighter are based on: https://www.paletton.com/#uid=1000u0k00g40cpB03kE00aY014s */
+   --color-monochrome-lightest: #F2F2F2;
+   --color-monochrome-lighter: #CCCBCB;
+   --color-monochrome-light: #A5A4A4;
+   --color-monochrome-neutral: #808080;
+   --color-monochrome-dark: #575757;
+   --color-monochrome-darker: #232323;
+   --color-monochrome-darkest: #0D0D0D;
+
+    /* Theme-respecting settings */
+   color-scheme: light dark;
+   --color-bg: light-dark(var(--color-monochrome-lightest), var(--color-monochrome-darker));
+   --color-bg-highlight: light-dark(var(--color-monochrome-dark), var(--color-monochrome-lighter));
+
+   --color-text: light-dark(var(--color-monochrome-darker), var(--color-monochrome-light));
+   --color-text-highlight: light-dark(var(--color-monochrome-lighter), var(--color-monochrome-darker));
+
+   --color-link: light-dark(#0000F0, #007BFF);
+   --color-attention: light-dark(#F00000, #F08000);
+}
+
+body {
+   color: var(--color-text);
+   background-color: var(--color-bg);
+   font-family: Segoe UI, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+   .invertable {
+      filter: invert(75%);
+   }
+}

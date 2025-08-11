@@ -180,6 +180,7 @@ async function displayPresets()
          imgDown.title = "Move Down";
          imgDown.id = PREFIX_DOWN + i;
          addClass(imgDown,"imgDown");
+         addClass(imgDown,"invertable");
          imgDown.addEventListener("click", moveDown);
       }
       tdP.appendChild(imgDown);
@@ -199,6 +200,7 @@ async function displayPresets()
          imgUp.title = "Move Up";
          imgUp.id = PREFIX_UP + i;
          addClass(imgUp,"imgUp");
+         addClass(imgUp,"invertable");
          imgUp.addEventListener("click", moveUp);
       }
       tdP.appendChild(imgUp);
