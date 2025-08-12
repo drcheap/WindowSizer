@@ -129,3 +129,5 @@ browser.browserAction.onClicked.addListener(toolbarClickHandler);
 
 const manifest = browser.runtime.getManifest();
 console.info(manifest.name + " version " + manifest.version + " by " + manifest.author);
+applyQuickResizeSetting();
+updateCachedQuickResize();
