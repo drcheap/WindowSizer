@@ -17,12 +17,6 @@ async function initialize(details)
 
    // Preset initialization, if needed
    const storage = await browser.storage.local.get(["version","presets","options","advanced"]);
-   if(storage.version === undefined)
-   {
-      // Had non-versioned preset storage, so treat it as version 1
-      storage.version = 1;
-   }
-
    if(Number.isInteger(storage.version))
    {
       if(storage.version < CURRENT_STORAGE_VERSION)
