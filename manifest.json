@@ -9,7 +9,10 @@
 
    "browser_specific_settings": {
       "gecko": {
-         "id": "windowsizer@drcheap.com"
+         "id": "windowsizer@drcheap.com",
+         "data_collection_permissions": {
+            "required": ["none"]
+         }
       }
    },
 
